@@ -8,9 +8,9 @@ import { Button } from '@/components/ui/button';
 import { Menu, X } from 'lucide-react';
 
 const sidebarItems = [
-    { name: 'Draws', href: '/dashboard/draws' },
-    { name: 'Prizes', href: '/dashboard/prizes' },
-    { name: 'Sellers', href: '/dashboard/sellers' },
+    { name: 'Sorteos', href: '/dashboard/draws' },
+    { name: 'Premios', href: '/dashboard/prizes' },
+    { name: 'Vendedores', href: '/dashboard/sellers' },
     { name: 'Tickets', href: '/dashboard/tickets' },
 ];
 

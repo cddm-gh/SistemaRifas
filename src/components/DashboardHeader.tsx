@@ -15,32 +15,27 @@ import LogoutButton from './LogoutButton';
 export default async function Header() {
     const supabase = createClient();
 
-    const {
-        data: { user },
-    } = await supabase.auth.getUser();
+    const { data } = await supabase.auth.getUser();
+    const { user: loggedInUser } = data;
 
-    if (!user) {
+    if (!loggedInUser) {
         redirect('/');
     }
 
-    // const { data: profile } = await supabase
-    //     .from('draw')
-    //     .select('full_name, avatar_url')
-    //     .eq('id', user.id)
-    //     .single();
+    const { data: user } = await supabase
+        .from('users')
+        .select('name, email, avatar_url')
+        .eq('id', loggedInUser.id)
+        .single();
 
-    // const userName = profile?.full_name || user.email;
-    // const avatarUrl = profile?.avatar_url;
+    const userName = user?.name || user?.email;
+    const avatarUrl = user?.avatar_url;
 
-    const userName = 'Admin';
-    const avatarUrl = undefined;
     return (
         <header className="bg-white shadow-sm">
             <div className="max-w-7xl mx-auto py-4 px-4 sm:px-6 lg:px-8">
                 <div className="flex items-center justify-between">
-                    <h2 className="text-2xl font-bold leading-7 text-gray-900 sm:text-3xl sm:truncate">
-                        Dashboard
-                    </h2>
+                    <h2 className="text-2xl font-bold leading-7 text-gray-900 sm:text-3xl sm:truncate"></h2>
                     <div className="flex items-center">
                         <span className="mr-4 text-sm font-medium text-gray-700">
                             {userName}
@@ -57,7 +52,7 @@ export default async function Header() {
                                             alt={userName}
                                         />
                                         <AvatarFallback>
-                                            {userName.charAt(0)}
+                                            {userName?.charAt(0)}
                                         </AvatarFallback>
                                     </Avatar>
                                 </Button>
@@ -73,7 +68,7 @@ export default async function Header() {
                                             {userName}
                                         </p>
                                         <p className="text-xs leading-none text-muted-foreground">
-                                            {user.email}
+                                            {user?.email}
                                         </p>
                                     </div>
                                 </DropdownMenuLabel>

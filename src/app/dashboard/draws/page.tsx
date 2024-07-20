@@ -1,5 +1,27 @@
-import React from 'react'
+import { Suspense } from 'react';
+import { getDraws } from '@/app/actions/draws';
+import Loader from '@/components/Loader';
+import { DataTable } from '@/components/data-table/DataTable';
+import { columns } from './columns';
 
-export default function DrawsPage() {
-    return <div>DrawsPage</div>
+async function DrawsContent() {
+    const draws = await getDraws();
+    return (
+        <div className="content mx-auto">
+            <DataTable
+                columns={columns}
+                data={draws}
+                filterBy="name"
+                filterInputText="Filtrar por nombre del Sorteo"
+            />
+        </div>
+    );
+}
+
+export default async function DrawsPage() {
+    return (
+        <Suspense fallback={<Loader />}>
+            <DrawsContent />
+        </Suspense>
+    );
 }

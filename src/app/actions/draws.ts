@@ -8,7 +8,7 @@ export const getDraws = async (): Promise<DrawWithPrizes[]> => {
     const { data, error } = await supabase
         .from('draws')
         .select('*, prizes(*)')
-        .eq('status', 'Upcoming')
+        // .eq('status', 'Upcoming')
         .order('draw_date', { ascending: true })
         .limit(6);
 
