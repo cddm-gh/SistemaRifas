@@ -1,21 +1,22 @@
 'use client';
 
-// import { deletePropiedad } from '@/app/actions/propiedades';
 import type { DrawWithPrizes } from '@/app/types/draws';
+import EditDrawForm from '@/components/draws/EditDrawForm';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
+import {
+    Sheet,
+    SheetContent,
+    SheetHeader,
+    SheetTitle,
+    SheetClose,
+} from '@/components/ui/sheet';
 import { formatDateTzToDisplay } from '@/utils/dates';
-// import {
-//     DropdownMenu,
-//     DropdownMenuContent,
-//     DropdownMenuItem,
-//     DropdownMenuTrigger,
-// } from '@/components/ui/dropdown-menu';
+
 import { type ColumnDef } from '@tanstack/react-table';
 import { ArrowDown, ArrowUp, ArrowUpDown, Pencil, Trash2 } from 'lucide-react';
-// import { useRouter } from 'next/navigation';
-// import { toast } from 'sonner';
+import { useState } from 'react';
 
 export const columns: ColumnDef<DrawWithPrizes>[] = [
     {
@@ -106,7 +107,7 @@ export const columns: ColumnDef<DrawWithPrizes>[] = [
                     {status === 'Pending'
                         ? 'Pendiente'
                         : status === 'Active'
-                          ? 'Iniciado'
+                          ? 'Activo'
                           : 'Finalizado'}
                 </Badge>
             );
@@ -155,15 +156,40 @@ export const columns: ColumnDef<DrawWithPrizes>[] = [
 ];
 
 function ActionsComponent({ draw }: { draw: DrawWithPrizes }) {
+    const [isEditing, setIsEditing] = useState(false);
+
+    function handleEditDraw(drawId: string) {
+        console.log('edit: ', drawId);
+        setIsEditing(true);
+    }
+
     return (
-        <div className="flex flex-row">
-            <button onClick={() => console.log('edit: ', draw.id)}>
-                <Pencil className="mr-2 h-4 w-4 text-yellow-600" />
-            </button>
-            <button onClick={() => console.log('delete: ', draw.id)}>
-                <Trash2 className="ml-2 h-4 w-4 text-red-500" />
-            </button>
-        </div>
+        <>
+            <div className="flex flex-row">
+                <button onClick={() => handleEditDraw(draw.id)}>
+                    <Pencil className="mr-2 h-4 w-4 text-yellow-600" />
+                </button>
+                <button onClick={() => console.log('delete: ', draw.id)}>
+                    <Trash2 className="ml-2 h-4 w-4 text-red-500" />
+                </button>
+            </div>
+            {isEditing && (
+                <Sheet
+                    open={isEditing}
+                    onOpenChange={() => setIsEditing(false)}
+                >
+                    <SheetContent>
+                        <SheetHeader>
+                            <SheetTitle>Editar Sorteo</SheetTitle>
+                            <SheetClose onClick={() => setIsEditing(false)} />
+                        </SheetHeader>
+                        <div>
+                            <EditDrawForm draw={draw} />
+                        </div>
+                    </SheetContent>
+                </Sheet>
+            )}
+        </>
     );
 }
 
