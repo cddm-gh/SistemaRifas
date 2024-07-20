@@ -87,7 +87,7 @@ export function DataTable<TData, TValue>({
                             .getColumn(filterBy)
                             ?.setFilterValue(event.target.value)
                     }
-                    className="max-w-sm"
+                    className="max-w-sm mr-2"
                 />
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>

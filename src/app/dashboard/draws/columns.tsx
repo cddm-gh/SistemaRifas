@@ -4,6 +4,7 @@
 import type { DrawWithPrizes } from '@/app/types/draws';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import { Checkbox } from '@/components/ui/checkbox';
 import { formatDateTzToDisplay } from '@/utils/dates';
 // import {
 //     DropdownMenu,
@@ -12,14 +13,49 @@ import { formatDateTzToDisplay } from '@/utils/dates';
 //     DropdownMenuTrigger,
 // } from '@/components/ui/dropdown-menu';
 import { type ColumnDef } from '@tanstack/react-table';
-import { ArrowUpDown, Pencil, Trash2 } from 'lucide-react';
+import { ArrowDown, ArrowUp, ArrowUpDown, Pencil, Trash2 } from 'lucide-react';
 // import { useRouter } from 'next/navigation';
 // import { toast } from 'sonner';
 
 export const columns: ColumnDef<DrawWithPrizes>[] = [
     {
+        id: 'select',
+        header: ({ table }) => (
+            <Checkbox
+                checked={
+                    table.getIsAllPageRowsSelected() ||
+                    (table.getIsSomePageRowsSelected() && 'indeterminate')
+                }
+                onCheckedChange={(value) =>
+                    table.toggleAllPageRowsSelected(!!value)
+                }
+                aria-label="Select all"
+            />
+        ),
+        cell: ({ row }) => (
+            <Checkbox
+                checked={row.getIsSelected()}
+                onCheckedChange={(value) => row.toggleSelected(!!value)}
+                aria-label="Select row"
+            />
+        ),
+        enableSorting: false,
+        enableHiding: false,
+    },
+    {
         accessorKey: 'name',
         header: ({ column }) => {
+            const isSorted = column.getIsSorted();
+            const isAscending = isSorted === 'asc';
+            const icon = isSorted ? (
+                isAscending ? (
+                    <ArrowUp className="h-4 w-4" />
+                ) : (
+                    <ArrowDown className="h-4 w-4" />
+                )
+            ) : (
+                <ArrowUpDown className="h-4 w-4" />
+            );
             return (
                 <Button
                     variant="ghost"
@@ -28,7 +64,7 @@ export const columns: ColumnDef<DrawWithPrizes>[] = [
                     }
                 >
                     Nombre
-                    <ArrowUpDown className="ml-2 h-4 w-4" />
+                    {icon}
                 </Button>
             );
         },
@@ -78,7 +114,30 @@ export const columns: ColumnDef<DrawWithPrizes>[] = [
     },
     {
         accessorKey: 'draw_date',
-        header: 'Fecha de Sorteo',
+        header: ({ column }) => {
+            const isSorted = column.getIsSorted();
+            const isAscending = isSorted === 'asc';
+            const icon = isSorted ? (
+                isAscending ? (
+                    <ArrowUp className="h-4 w-4" />
+                ) : (
+                    <ArrowDown className="h-4 w-4" />
+                )
+            ) : (
+                <ArrowUpDown className="h-4 w-4" />
+            );
+            return (
+                <Button
+                    variant="ghost"
+                    onClick={() =>
+                        column.toggleSorting(column.getIsSorted() === 'asc')
+                    }
+                >
+                    Fecha de Sorteo
+                    {icon}
+                </Button>
+            );
+        },
         cell: ({ row }) => {
             const date = row.getValue('draw_date') as string;
             const formatted = formatDateTzToDisplay(date);
@@ -99,7 +158,7 @@ function ActionsComponent({ draw }: { draw: DrawWithPrizes }) {
     return (
         <div className="flex flex-row">
             <button onClick={() => console.log('edit: ', draw.id)}>
-                <Pencil className="mr-2 h-4 w-4" />
+                <Pencil className="mr-2 h-4 w-4 text-yellow-600" />
             </button>
             <button onClick={() => console.log('delete: ', draw.id)}>
                 <Trash2 className="ml-2 h-4 w-4 text-red-500" />
