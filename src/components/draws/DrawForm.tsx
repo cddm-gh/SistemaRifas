@@ -15,7 +15,7 @@ import { Input } from '../ui/input';
 import { Textarea } from '../ui/textarea';
 import { Button } from '../ui/button';
 import { useForm } from 'react-hook-form';
-import { editDrawFormSchema } from '@/validations/draws';
+import { drawFormSchema } from '@/validations/draws';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
 import { Calendar } from '../ui/calendar';
@@ -38,8 +38,9 @@ interface DrawFormProps {
 }
 
 export default function DrawForm({ draw, isCreating = false }: DrawFormProps) {
-    const form = useForm<z.infer<typeof editDrawFormSchema>>({
-        resolver: zodResolver(editDrawFormSchema),
+    console.log('draw: ', draw);
+    const form = useForm<z.infer<typeof drawFormSchema>>({
+        resolver: zodResolver(drawFormSchema),
         defaultValues: {
             name: draw?.name,
             draw_image: '',
@@ -47,6 +48,7 @@ export default function DrawForm({ draw, isCreating = false }: DrawFormProps) {
             ticket_price: draw?.ticket_price,
             status: draw?.status,
             description: draw?.description,
+            draw_date: new Date(),
         },
     });
 
@@ -54,7 +56,7 @@ export default function DrawForm({ draw, isCreating = false }: DrawFormProps) {
     //     formState: { isSubmitting },
     // } = form;
 
-    async function onSubmit(values: z.infer<typeof editDrawFormSchema>) {
+    async function onSubmit(values: z.infer<typeof drawFormSchema>) {
         console.log(values);
     }
 

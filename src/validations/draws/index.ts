@@ -15,4 +15,4 @@ const DrawSchema = z.object({
     updated_at: z.string().optional(),
 });
 
-export const editDrawFormSchema = DrawSchema.extend({});
+export const drawFormSchema = DrawSchema.extend({});

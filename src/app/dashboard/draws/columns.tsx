@@ -8,7 +8,15 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { formatDateTzToDisplay } from '@/utils/dates';
 
 import { type ColumnDef } from '@tanstack/react-table';
-import { ArrowDown, ArrowUp, ArrowUpDown, Pencil, Trash2 } from 'lucide-react';
+import {
+    ArrowDown,
+    ArrowUp,
+    ArrowUpDown,
+    CalendarCheck,
+    CircleDollarSign,
+    Pencil,
+    Trash2,
+} from 'lucide-react';
 import { useState } from 'react';
 
 export const columns: ColumnDef<DrawWithPrizes>[] = [
@@ -23,14 +31,14 @@ export const columns: ColumnDef<DrawWithPrizes>[] = [
                 onCheckedChange={(value) =>
                     table.toggleAllPageRowsSelected(!!value)
                 }
-                aria-label="Select all"
+                aria-label="Seleccionar todas"
             />
         ),
         cell: ({ row }) => (
             <Checkbox
                 checked={row.getIsSelected()}
                 onCheckedChange={(value) => row.toggleSelected(!!value)}
-                aria-label="Select row"
+                aria-label="Seleccionar fila"
             />
         ),
         enableSorting: false,
@@ -57,7 +65,7 @@ export const columns: ColumnDef<DrawWithPrizes>[] = [
                         column.toggleSorting(column.getIsSorted() === 'asc')
                     }
                 >
-                    Nombre
+                    Nombre Sorteo
                     {icon}
                 </Button>
             );
@@ -65,7 +73,14 @@ export const columns: ColumnDef<DrawWithPrizes>[] = [
     },
     {
         accessorKey: 'ticket_price',
-        header: 'Precio Ticket',
+        header: () => {
+            return (
+                <span className="flex flex-row items-center space-x-1">
+                    Precio Ticket
+                    <CircleDollarSign className="h-4 w-4" />
+                </span>
+            );
+        },
         cell: ({ row }) => {
             const amount = parseFloat(row.getValue('ticket_price'));
             const formatted = new Intl.NumberFormat('en-US', {
@@ -79,6 +94,13 @@ export const columns: ColumnDef<DrawWithPrizes>[] = [
     {
         accessorKey: 'total_tickets',
         header: 'Cantidad Tickets',
+        cell: ({ row }) => {
+            return (
+                <div className="text-center font-light">
+                    {row.getValue('total_tickets')}
+                </div>
+            );
+        },
     },
     {
         accessorKey: 'status',
@@ -127,6 +149,7 @@ export const columns: ColumnDef<DrawWithPrizes>[] = [
                         column.toggleSorting(column.getIsSorted() === 'asc')
                     }
                 >
+                    <CalendarCheck className="h-4 w-4 mr-2" />
                     Fecha de Sorteo
                     {icon}
                 </Button>
