@@ -1,17 +1,10 @@
 'use client';
 
 import type { DrawWithPrizes } from '@/app/types/draws';
-import EditDrawForm from '@/components/draws/EditDrawForm';
+import DrawFormSheet from '@/components/draws/DrawFormSheet';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
-import {
-    Sheet,
-    SheetContent,
-    SheetHeader,
-    SheetTitle,
-    SheetClose,
-} from '@/components/ui/sheet';
 import { formatDateTzToDisplay } from '@/utils/dates';
 
 import { type ColumnDef } from '@tanstack/react-table';
@@ -174,20 +167,12 @@ function ActionsComponent({ draw }: { draw: DrawWithPrizes }) {
                 </button>
             </div>
             {isEditing && (
-                <Sheet
-                    open={isEditing}
-                    onOpenChange={() => setIsEditing(false)}
-                >
-                    <SheetContent>
-                        <SheetHeader>
-                            <SheetTitle>Editar Sorteo</SheetTitle>
-                            <SheetClose onClick={() => setIsEditing(false)} />
-                        </SheetHeader>
-                        <div>
-                            <EditDrawForm draw={draw} />
-                        </div>
-                    </SheetContent>
-                </Sheet>
+                <DrawFormSheet
+                    isOpen={isEditing}
+                    handleOpen={setIsEditing}
+                    sheetTitle="Editar Sorteo"
+                    draw={draw}
+                />
             )}
         </>
     );

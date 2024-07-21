@@ -30,22 +30,23 @@ import {
     SelectValue,
 } from '../ui/select';
 
-interface EditDrawFormProps {
-    draw: DrawWithPrizes;
+interface DrawFormProps {
+    draw?: DrawWithPrizes;
+    isCreating: boolean;
     // onSubmit: (formData: FormData) => void; // Adjust the type as needed
     // onClose: () => void;
 }
 
-export default function EditDrawForm({ draw }: EditDrawFormProps) {
+export default function DrawForm({ draw, isCreating = false }: DrawFormProps) {
     const form = useForm<z.infer<typeof editDrawFormSchema>>({
         resolver: zodResolver(editDrawFormSchema),
         defaultValues: {
-            name: draw.name,
+            name: draw?.name,
             draw_image: '',
-            total_tickets: draw.total_tickets,
-            ticket_price: draw.ticket_price,
-            status: draw.status,
-            description: draw.description,
+            total_tickets: draw?.total_tickets,
+            ticket_price: draw?.ticket_price,
+            status: draw?.status,
+            description: draw?.description,
         },
     });
 
@@ -247,7 +248,7 @@ export default function EditDrawForm({ draw }: EditDrawFormProps) {
                         Cancelar
                     </Button> */}
                     <Button type="submit" className="mt-2">
-                        Guardar
+                        {isCreating ? 'Crear' : 'Guardar'}
                     </Button>
                 </div>
             </form>

@@ -7,141 +7,138 @@ export type Json =
   | Json[]
 
 export type Database = {
-    public: {
-        Tables: {
-            draws: {
-                Row: {
-                    created_at: string;
-                    description: string;
-                    draw_date: string;
-                    draw_image: string | null;
-                    id: string;
-                    name: string;
-                    payment_due_date: string;
-                    qr_code: string | null;
-                    status: string;
-                    ticket_price: number;
-                    total_tickets: number;
-                    updated_at: string;
-                };
-                Insert: {
-                    created_at?: string;
-                    description?: string | null;
-                    draw_date: string;
-                    draw_image?: string | null;
-                    id?: string;
-                    name: string;
-                    payment_due_date: string;
-                    qr_code?: string | null;
-                    status?: string;
-                    ticket_price: number;
-                    total_tickets: number;
-                    updated_at?: string;
-                };
-                Update: {
-                    created_at?: string;
-                    description?: string | null;
-                    draw_date?: string;
-                    draw_image?: string | null;
-                    id?: string;
-                    name?: string;
-                    payment_due_date?: string;
-                    qr_code?: string | null;
-                    status?: string;
-                    ticket_price?: number;
-                    total_tickets?: number;
-                    updated_at?: string;
-                };
-                Relationships: [];
-            };
-            prizes: {
-                Row: {
-                    created_at: string;
-                    description: string;
-                    draw_id: string;
-                    id: string;
-                    image: string | null;
-                    place: number;
-                };
-                Insert: {
-                    created_at?: string;
-                    description: string;
-                    draw_id?: string;
-                    id?: string;
-                    image?: string | null;
-                    place?: number;
-                };
-                Update: {
-                    created_at?: string;
-                    description?: string;
-                    draw_id?: string;
-                    id?: string;
-                    image?: string | null;
-                    place?: number;
-                };
-                Relationships: [
-                    {
-                        foreignKeyName: 'prizes_draw_id_fkey';
-                        columns: ['draw_id'];
-                        isOneToOne: false;
-                        referencedRelation: 'draws';
-                        referencedColumns: ['id'];
-                    },
-                ];
-            };
-            users: {
-                Row: {
-                    avatar_url: string | null;
-                    created_at: string;
-                    email: string;
-                    id: string;
-                    name: string;
-                    phone: string | null;
-                    user_type: string;
-                };
-                Insert: {
-                    avatar_url?: string | null;
-                    created_at?: string;
-                    email: string;
-                    id: string;
-                    name: string;
-                    phone?: string | null;
-                    user_type?: string;
-                };
-                Update: {
-                    avatar_url?: string | null;
-                    created_at?: string;
-                    email?: string;
-                    id?: string;
-                    name?: string;
-                    phone?: string | null;
-                    user_type?: string;
-                };
-                Relationships: [
-                    {
-                        foreignKeyName: 'users_id_fkey';
-                        columns: ['id'];
-                        isOneToOne: true;
-                        referencedRelation: 'users';
-                        referencedColumns: ['id'];
-                    },
-                ];
-            };
-        };
-        Views: {
-            [_ in never]: never;
-        };
-        Functions: {
-            [_ in never]: never;
-        };
-        Enums: {
-            [_ in never]: never;
-        };
-        CompositeTypes: {
-            [_ in never]: never;
-        };
-    };
-};
+  public: {
+    Tables: {
+      draws: {
+        Row: {
+          created_at: string
+          description: string
+          draw_date: string
+          draw_image: string | null
+          id: string
+          name: string
+          payment_due_date: string
+          qr_code: string | null
+          status: string
+          ticket_price: number
+          total_tickets: number
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          description: string
+          draw_date: string
+          draw_image?: string | null
+          id?: string
+          name: string
+          payment_due_date: string
+          qr_code?: string | null
+          status?: string
+          ticket_price: number
+          total_tickets: number
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          description?: string
+          draw_date?: string
+          draw_image?: string | null
+          id?: string
+          name?: string
+          payment_due_date?: string
+          qr_code?: string | null
+          status?: string
+          ticket_price?: number
+          total_tickets?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      prizes: {
+        Row: {
+          created_at: string
+          description: string
+          draw_id: string
+          id: string
+          image: string | null
+          place: number
+        }
+        Insert: {
+          created_at?: string
+          description: string
+          draw_id?: string
+          id?: string
+          image?: string | null
+          place?: number
+        }
+        Update: {
+          created_at?: string
+          description?: string
+          draw_id?: string
+          id?: string
+          image?: string | null
+          place?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "prizes_draw_id_fkey"
+            columns: ["draw_id"]
+            isOneToOne: false
+            referencedRelation: "draws"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      users: {
+        Row: {
+          avatar_url: string | null
+          email: string
+          id: string
+          name: string
+          phone: string
+          user_type: Database["public"]["Enums"]["user_type_enum"]
+        }
+        Insert: {
+          avatar_url?: string | null
+          email: string
+          id: string
+          name: string
+          phone: string
+          user_type: Database["public"]["Enums"]["user_type_enum"]
+        }
+        Update: {
+          avatar_url?: string | null
+          email?: string
+          id?: string
+          name?: string
+          phone?: string
+          user_type?: Database["public"]["Enums"]["user_type_enum"]
+        }
+        Relationships: [
+          {
+            foreignKeyName: "users_id_fkey"
+            columns: ["id"]
+            isOneToOne: true
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+    }
+    Views: {
+      [_ in never]: never
+    }
+    Functions: {
+      [_ in never]: never
+    }
+    Enums: {
+      user_type_enum: "admin" | "client" | "seller"
+    }
+    CompositeTypes: {
+      [_ in never]: never
+    }
+  }
+}
 
 type PublicSchema = Database[Extract<keyof Database, "public">]
 
