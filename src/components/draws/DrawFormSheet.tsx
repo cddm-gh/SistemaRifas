@@ -24,12 +24,15 @@ export default function DrawFormSheet({
 }: DrawFormProps) {
     return (
         <Sheet open={isOpen} onOpenChange={() => handleOpen(false)}>
-            <SheetContent>
+            <SheetContent
+                aria-labelledby="sheet-title"
+                aria-describedby="sheet-description"
+            >
                 <SheetHeader>
-                    <SheetTitle>{sheetTitle}</SheetTitle>
+                    <SheetTitle id="sheet-title">{sheetTitle}</SheetTitle>
                     <SheetClose onClick={() => handleOpen(false)} />
                 </SheetHeader>
-                <div>
+                <div id="sheet-description">
                     <DrawForm isCreating={true} draw={draw} />
                 </div>
             </SheetContent>

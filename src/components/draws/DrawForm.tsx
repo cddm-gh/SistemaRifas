@@ -20,7 +20,8 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
 import { Calendar } from '../ui/calendar';
 import { CalendarIcon } from 'lucide-react';
-import { format } from 'date-fns';
+import { format, parseISO } from 'date-fns';
+import { es } from 'date-fns/locale';
 import { cn } from '@/lib/utils';
 import {
     Select,
@@ -29,6 +30,10 @@ import {
     SelectTrigger,
     SelectValue,
 } from '../ui/select';
+
+function sleep(ms: number) {
+    return new Promise((resolve) => setTimeout(resolve, ms));
+}
 
 interface DrawFormProps {
     draw?: DrawWithPrizes;
@@ -48,16 +53,19 @@ export default function DrawForm({ draw, isCreating = false }: DrawFormProps) {
             ticket_price: draw?.ticket_price,
             status: draw?.status,
             description: draw?.description,
-            draw_date: new Date(),
+            // draw_date: draw?.draw_date
+            //     ? draw?.draw_date.toISOString()
+            //     : undefined,
         },
     });
 
-    // const {
-    //     formState: { isSubmitting },
-    // } = form;
+    const {
+        formState: { isSubmitting },
+    } = form;
 
     async function onSubmit(values: z.infer<typeof drawFormSchema>) {
-        console.log(values);
+        console.log('submit form: ', values);
+        await sleep(1000);
     }
 
     return (
@@ -120,9 +128,15 @@ export default function DrawForm({ draw, isCreating = false }: DrawFormProps) {
                                             )}
                                         >
                                             {field.value ? (
-                                                format(field.value, 'PPP')
+                                                format(
+                                                    parseISO(field.value),
+                                                    'PPP',
+                                                    {
+                                                        locale: es,
+                                                    }
+                                                )
                                             ) : (
-                                                <span>Pick a date</span>
+                                                <span>Elige una fecha</span>
                                             )}
                                             <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
                                         </Button>
@@ -134,8 +148,16 @@ export default function DrawForm({ draw, isCreating = false }: DrawFormProps) {
                                 >
                                     <Calendar
                                         mode="single"
-                                        selected={field.value}
-                                        onSelect={field.onChange}
+                                        selected={
+                                            field.value
+                                                ? parseISO(field.value)
+                                                : undefined
+                                        }
+                                        onSelect={(date) =>
+                                            field.onChange(
+                                                date ? date.toISOString() : ''
+                                            )
+                                        }
                                         disabled={(date) => date < new Date()}
                                         initialFocus
                                     />
@@ -148,56 +170,47 @@ export default function DrawForm({ draw, isCreating = false }: DrawFormProps) {
                         </FormItem>
                     )}
                 />
-                <FormField
-                    control={form.control}
-                    name="total_tickets"
-                    render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>Cantidad Tickets</FormLabel>
-                            <FormControl>
-                                <Input
-                                    placeholder="Cantidad total de tickets para el sorteo"
-                                    type="number"
-                                    {...field}
-                                />
-                            </FormControl>
-                            <FormDescription></FormDescription>
-                            <FormMessage />
-                        </FormItem>
-                    )}
-                />
-                <FormField
-                    control={form.control}
-                    name="ticket_price"
-                    render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>Precio del Ticket</FormLabel>
-                            <FormControl>
-                                <Input
-                                    placeholder="Valor de cada ticket"
-                                    type="number"
-                                    {...field}
-                                />
-                            </FormControl>
-                            <FormDescription></FormDescription>
-                            <FormMessage />
-                        </FormItem>
-                    )}
-                />
-                {/* <FormField
-                    control={form.control}
-                    name="prizes"
-                    render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>Premios</FormLabel>
-                            <FormControl>
-                                <Input placeholder="Premio #1" {...field} />
-                            </FormControl>
-                            <FormDescription></FormDescription>
-                            <FormMessage />
-                        </FormItem>
-                    )}
-                /> */}
+                <div className="flex flex-row space-x-4">
+                    <FormField
+                        control={form.control}
+                        name="total_tickets"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>Cantidad Tickets</FormLabel>
+                                <FormControl>
+                                    <Input
+                                        placeholder="Cantidad total de tickets para el sorteo"
+                                        type="number"
+                                        min="1"
+                                        {...field}
+                                    />
+                                </FormControl>
+                                <FormDescription></FormDescription>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+                    <FormField
+                        control={form.control}
+                        name="ticket_price"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>Precio del Ticket</FormLabel>
+                                <FormControl>
+                                    <Input
+                                        placeholder="Valor de cada ticket"
+                                        type="number"
+                                        step="0.01"
+                                        min="0"
+                                        {...field}
+                                    />
+                                </FormControl>
+                                <FormDescription></FormDescription>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+                </div>
                 <FormField
                     control={form.control}
                     name="status"
@@ -206,11 +219,11 @@ export default function DrawForm({ draw, isCreating = false }: DrawFormProps) {
                             <FormLabel>Estado</FormLabel>
                             <Select
                                 onValueChange={field.onChange}
-                                defaultValue={field.value}
+                                defaultValue={field.value || 'Pending'}
                             >
                                 <FormControl>
                                     <SelectTrigger>
-                                        <SelectValue placeholder="Select a verified email to display" />
+                                        <SelectValue placeholder="Estado actual del sorteo" />
                                     </SelectTrigger>
                                 </FormControl>
                                 <SelectContent>
@@ -233,7 +246,7 @@ export default function DrawForm({ draw, isCreating = false }: DrawFormProps) {
                     name="description"
                     render={({ field }) => (
                         <FormItem>
-                            <FormLabel>Premios</FormLabel>
+                            <FormLabel>Descripción</FormLabel>
                             <FormControl>
                                 <Textarea
                                     placeholder="Descripción y condiciones del sorteo"
@@ -249,7 +262,11 @@ export default function DrawForm({ draw, isCreating = false }: DrawFormProps) {
                     {/* <Button variant={'secondary'} className="mt-2" onClick={}>
                         Cancelar
                     </Button> */}
-                    <Button type="submit" className="mt-2">
+                    <Button
+                        type="submit"
+                        className="mt-2"
+                        disabled={isSubmitting}
+                    >
                         {isCreating ? 'Crear' : 'Guardar'}
                     </Button>
                 </div>
