@@ -30,10 +30,7 @@ import {
     SelectTrigger,
     SelectValue,
 } from '../ui/select';
-
-function sleep(ms: number) {
-    return new Promise((resolve) => setTimeout(resolve, ms));
-}
+import { createDraw } from '@/app/actions/draws';
 
 interface DrawFormProps {
     draw?: DrawWithPrizes;
@@ -65,7 +62,7 @@ export default function DrawForm({ draw, isCreating = false }: DrawFormProps) {
 
     async function onSubmit(values: z.infer<typeof drawFormSchema>) {
         console.log('submit form: ', values);
-        await sleep(1000);
+        await createDraw(values);
     }
 
     return (

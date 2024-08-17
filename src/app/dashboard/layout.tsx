@@ -1,5 +1,6 @@
 import Sidebar from '@/components/Sidebar';
 import DashboardHeader from '@/components/DashboardHeader';
+import { Toaster } from '@/components/ui/sonner';
 
 export default function DashboardLayout({
     children,
@@ -9,6 +10,7 @@ export default function DashboardLayout({
     return (
         <div className="flex h-screen bg-gray-100">
             <Sidebar />
+            <Toaster />
             <div className="flex flex-col flex-1 md:ml-64 overflow-hidden">
                 <DashboardHeader />
                 <main className="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100">

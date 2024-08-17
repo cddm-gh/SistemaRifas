@@ -30,8 +30,6 @@ const DrawSchema = z.object({
     status: z.string().optional(),
     // created_at: z.string().optional(),
     // id: z.string().optional(),
-    // payment_due_date: z.string(),
-    // qr_code: z.string().optional(),
     // updated_at: z.string().optional(),
 });
 

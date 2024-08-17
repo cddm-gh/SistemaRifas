@@ -13,12 +13,10 @@ export type Database = {
                 Row: {
                     created_at: string;
                     description: string;
-                    draw_date: Date;
+                    draw_date: string;
                     draw_image: string | null;
                     id: string;
                     name: string;
-                    payment_due_date: string;
-                    qr_code: string | null;
                     status: string;
                     ticket_price: number;
                     total_tickets: number;
@@ -31,8 +29,6 @@ export type Database = {
                     draw_image?: string | null;
                     id?: string;
                     name: string;
-                    payment_due_date: string;
-                    qr_code?: string | null;
                     status?: string;
                     ticket_price: number;
                     total_tickets: number;
@@ -45,8 +41,6 @@ export type Database = {
                     draw_image?: string | null;
                     id?: string;
                     name?: string;
-                    payment_due_date?: string;
-                    qr_code?: string | null;
                     status?: string;
                     ticket_price?: number;
                     total_tickets?: number;

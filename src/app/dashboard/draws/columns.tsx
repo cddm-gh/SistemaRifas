@@ -1,5 +1,6 @@
 'use client';
 
+import { deleteDraw } from '@/app/actions/draws';
 import type { DrawWithPrizes } from '@/app/types/draws';
 import DrawFormSheet from '@/components/draws/DrawFormSheet';
 import { Badge } from '@/components/ui/badge';
@@ -18,6 +19,7 @@ import {
     Trash2,
 } from 'lucide-react';
 import { useState } from 'react';
+import { toast } from 'sonner';
 
 export const columns: ColumnDef<DrawWithPrizes>[] = [
     {
@@ -179,13 +181,18 @@ function ActionsComponent({ draw }: { draw: DrawWithPrizes }) {
         setIsEditing(true);
     }
 
+    async function handleDeleteDraw(drawId: string, name: string) {
+        await deleteDraw(drawId);
+        toast(`Sorteo ${name} Eliminado!`);
+    }
+
     return (
         <>
             <div className="flex flex-row">
                 <button onClick={() => handleEditDraw(draw.id)}>
                     <Pencil className="mr-2 h-4 w-4 text-yellow-600" />
                 </button>
-                <button onClick={() => console.log('delete: ', draw.id)}>
+                <button onClick={() => handleDeleteDraw(draw.id, draw.name)}>
                     <Trash2 className="ml-2 h-4 w-4 text-red-500" />
                 </button>
             </div>
