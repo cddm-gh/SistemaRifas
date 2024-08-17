@@ -8,7 +8,7 @@ interface Props {
 
 export default function DrawListCard({ draw }: Props) {
     const { draw_date, prizes, name, id } = draw;
-    const formattedDate = formatDateTzToDisplay(draw_date);
+    const formattedDate = formatDateTzToDisplay(draw_date.toString());
 
     return (
         <div className="border p-4 rounded-lg">
